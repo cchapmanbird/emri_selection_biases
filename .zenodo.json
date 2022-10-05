@@ -1,0 +1,27 @@
+{
+    "description": "Initial data release to accompany 'Rapid determination of LISA sensitivity to extreme mass ratio inspirals with machine learning' (C. E. A. Chapman-Bird et. al 2022)", 
+    "license": "other-open", 
+    "title": "CChapmanbird/emri_selection_biases", 
+    "version": "v0.1.0", 
+    "upload_type": "software", 
+    "publication_date": "2022-10-05", 
+    "creators": [
+        {
+            "affiliation": "University of Glasgow", 
+            "name": "Christian Chapman-Bird"
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/CChapmanbird/emri_selection_biases/tree/v1.0.0", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.7148266", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
