@@ -1,8 +1,7 @@
 from torch import nn
 import torch
 import numpy as np
-from mlsel.nn.model_train_test import model_train_test
-from mlsel.nn.model_creation import create_mlp
+from utils import model_train_test, create_mlp
 import pandas as pd
 
 if __name__ == '__main__':
