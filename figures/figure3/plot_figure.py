@@ -5,18 +5,20 @@ from itertools import product
 import scipy.stats
 from collections import namedtuple
 import pandas as pd
+import seaborn as sns
 
 def make_pp_plot(CI_file_prefix, filename=None, confidence_interval=[0.68, 0.95, 0.997],
                  lines=None, legend_fontsize='x-small', title=True,
                  confidence_interval_alpha=0.1, fig=None, ax=None,legend=True,
+                 colors = None, lss = None, lws = None,
                  **kwargs):
     credible_levels = pd.read_csv(f'../../data/credible_intervals/{CI_file_prefix}_credible_intervals.csv')
-    if lines is None:
-        colors = ["C{}".format(i) for i in range(8)]
-        linestyles = ["-", "--", ":"]
-        lines = ["{}{}".format(a, b) for a, b in product(linestyles, colors)]
-    if len(lines) < len(credible_levels.keys()):
-        raise ValueError("Larger number of parameters than unique linestyles")
+    # if lines is None:
+    #     colors = ["C{}".format(i) for i in range(8)]
+    #     linestyles = ["-", "--", ":"]
+    #     lines = ["{}{}".format(a, b) for a, b in product(linestyles, colors)]
+    # if len(lines) < len(credible_levels.keys()):
+    #     raise ValueError("Larger number of parameters than unique linestyles")
 
     x_values = np.linspace(0, 1, 1001)
 
@@ -50,13 +52,13 @@ def make_pp_plot(CI_file_prefix, filename=None, confidence_interval=[0.68, 0.95,
         pvalues.append(pvalue)
         name = key
         label = "{}".format(name)
-        ax.plot(x_values, pp, lines[ii], label=label, **kwargs)
+        ax.plot(x_values, pp, ls = lss[ii], c=colors[ii], lw=lws[ii], label=label, **kwargs)
     Pvals = namedtuple('pvals', ['combined_pvalue', 'pvalues', 'names'])
     pvals = Pvals(combined_pvalue=scipy.stats.combine_pvalues(pvalues)[1],
                   pvalues=pvalues,
                   names=list(credible_levels.keys()))
-
-    ax.set_xlabel("C.I.")
+    print(f"{scipy.stats.combine_pvalues(pvalues)[1]:.3e}")
+    # ax.set_xlabel("C.I.")
     ax.set_ylabel("Fraction of events in C.I.")
     if legend:
         ax.legend(handlelength=2, labelspacing=0.25, fontsize=legend_fontsize, loc='upper left', frameon=False)
@@ -78,13 +80,19 @@ if __name__ == "__main__":
     texlabels = [r"$\lambda_M$",r"$M_\mathrm{min}$",r"$M_\mathrm{max}$", r"$\lambda_\mu$",r"$\mu_\mathrm{min}$",r"$\mu_\mathrm{max}$",r"$\mu_a$",r"$\sigma_a$",r"$R$"]
     labels = ["lambda_M","m_min","m_max","lambda_mu","mu_min","mu_max","mu_a","sigma_a","rate"]
     
+    pal = sns.color_palette(palette="colorblind").as_hex()
+    colors = [pal[i] for i in range(5)] + [pal[i] for i in range(5)]
+    lines = ['-' for i in range(5)] + ['--' for i in range(5)]
+    lws = [1, 1.25, 1.5, 1.75, 2.] + [1, 1.25, 1.5, 1.75, 2.]
     fig, ax = plt.subplots(nrows=3, figsize=(4,10))
-    make_pp_plot('NO_SF', fig=fig,ax=ax[0],legend=False)
-    make_pp_plot('LINEAR_SF', fig=fig, ax=ax[1], legend=False)
-    make_pp_plot('SF', fig=fig,ax=ax[2],legend=True)
-
-    for axis, letter in zip(ax, ['(a)','(b)','(c)']):
-        axis.text(0.9, 0.05, letter, transform=axis.transAxes)
-
+    make_pp_plot('NO_SF', fig=fig,ax=ax[0],legend=False, colors=colors, lss=lines, lws=lws)
+    make_pp_plot('LINEAR_SF', fig=fig, ax=ax[1], legend=False, colors=colors, lss=lines, lws=lws)
+    make_pp_plot('SF', fig=fig,ax=ax[2],legend=True, colors=colors, lss=lines, lws=lws, legend_fontsize='medium')
+    ax[0].xaxis.set_ticklabels([])
+    ax[1].xaxis.set_ticklabels([])
+    ax[2].set_xlabel("C.I.")
+    plt.subplots_adjust(hspace=0.05)
+    for axis, letter, xdist,c in zip(ax, ['Uncorrected','Linear','Network'], [0.70,0.81,0.77], [pal[1],pal[2],pal[3]]):
+        axis.text(xdist, 0.07, letter, transform=axis.transAxes, bbox={"fc":c+'50',"ec":(0,0,0,0)})
     fig.savefig('./joint_pp.png',dpi=500, bbox_inches='tight')
     fig.savefig('./joint_pp.pdf', bbox_inches='tight')

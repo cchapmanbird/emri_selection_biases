@@ -108,12 +108,19 @@ net_rel_cdf = cumulative_dist(abs(1-net_mismatches[net_mismatches != 0]))
 # plt.savefig('reldiff_CDF.pdf')
 # plt.savefig('reldiff_CDF.png',dpi=500)
 
+# lws = [2,3,4,1]
+# lss = ['--','-.',':','-']
+
+lws = [4,3,2,1]
+lss = [':','--','-.','-']
+
 fig, ax = plt.subplots(ncols=2,figsize=(11,5))
 
-ax[0].plot(*lin_abs_cdf, label='Linear',color=pal[0])
-ax[0].plot(*near_abs_cdf, label='Nearest Neighb.',color=pal[1])
-ax[0].plot(*spl_abs_cdf, label='Cubic Spline',color=pal[2])
-ax[0].plot(*net_abs_cdf, label='Network',color=pal[3])
+ax[0].plot(*near_abs_cdf, label='Nearest Neighb.',color=pal[0],lw=lws[0], ls=lss[0])
+ax[0].plot(*lin_abs_cdf, label='Linear',color=pal[1],lw=lws[1], ls=lss[1])
+ax[0].plot(*spl_abs_cdf, label='Cubic Spline',color=pal[2],lw=lws[2], ls=lss[2])
+ax[0].plot(*net_abs_cdf, label='Network',color=pal[3],lw=lws[3], ls=lss[3])
+
 ax[0].set_xlim(5e-4,500)
 ax[0].set_ylim(0,1)
 ax[0].set_xscale('log')
@@ -121,18 +128,18 @@ ax[0].set_xlabel(r'$|\rho_\mathrm{true} - \rho_\mathrm{pred}|$', fontsize=20)
 ax[0].set_ylabel('CDF', fontsize=20)
 ax[0].tick_params(which='both',labelsize=17)
 ax[0].legend(loc='upper left', fontsize=15, frameon=False)
-ax[0].text(0.95, 0.05, '(a)', horizontalalignment='center', verticalalignment='center', transform=ax[0].transAxes, fontsize=17)
+# ax[0].text(0.95, 0.05, '(a)', horizontalalignment='center', verticalalignment='center', transform=ax[0].transAxes, fontsize=17)
 
-ax[1].plot(*lin_rel_cdf, label='Linear',color=pal[0])
-ax[1].plot(*near_rel_cdf, label='Nearest Neighb.',color=pal[1])
-ax[1].plot(*spl_rel_cdf, label='Cubic Spline',color=pal[2])
-ax[1].plot(*net_rel_cdf, label='Network',color=pal[3])
+ax[1].plot(*near_rel_cdf, label='Nearest Neighb.', color=pal[0],lw=lws[0], ls=lss[0])
+ax[1].plot(*lin_rel_cdf, label='Linear',color=pal[1],lw=lws[1], ls=lss[1])
+ax[1].plot(*spl_rel_cdf, label='Cubic Spline',color=pal[2],lw=lws[2], ls=lss[2])
+ax[1].plot(*net_rel_cdf, label='Network',color=pal[3],lw=lws[3], ls=lss[3])
 ax[1].set_xlim(1e-5,20)
 ax[1].set_ylim(0,1)
 ax[1].set_xscale('log')
 ax[1].set_xlabel(r'$|1 - \rho_\mathrm{true}/\rho_\mathrm{pred}|$', fontsize=20)
 ax[1].tick_params(axis='both', which='both',labelsize=17, labelleft=False)
-ax[1].text(0.95, 0.05, '(b)', horizontalalignment='center', verticalalignment='center', transform=ax[1].transAxes, fontsize=17)
+# ax[1].text(0.95, 0.05, '(b)', horizontalalignment='center', verticalalignment='center', transform=ax[1].transAxes, fontsize=17)
 
 fig.tight_layout()
 
