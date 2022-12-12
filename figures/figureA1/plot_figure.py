@@ -10,6 +10,8 @@ matplotlib.rc('text', usetex=True)
 
 pal = sns.color_palette(palette="colorblind").as_hex()
 
+plot_cis = False
+
 default_kwargs = dict(
     bins=32,
     smooth=0.9,
@@ -18,13 +20,16 @@ default_kwargs = dict(
     levels=(1 - np.exp(-0.5), 1 - np.exp(-2), 1 - np.exp(-9 / 2.)),
     plot_density=False,
     plot_datapoints=False,
-    # title_fmt = ".4f",
     fill_contours=False,
     max_n_ticks = 4,
     show_titles=False,
     label_kwargs=dict(fontsize=26),
     labelpad=0.2,
 )
+
+if plot_cis:
+    default_kwargs["title_fmt"] = ".4f"
+    default_kwargs["show_titles"] = True
 
 nope = ["logL","logP","it"]
 with open('../../data/population_posteriors/T10/0/SF/result.json','r') as f:
@@ -69,5 +74,9 @@ orange = mlines.Line2D([],[], color=pal[4],linestyle="dashed", linewidth=3.5,lab
 
 fig.legend(handles=[orange, blue], loc=(0.6, 0.8),fontsize=32, frameon=False)
 
-fig.savefig('joint_corner.png',dpi=500, bbox_inches='tight')
-fig.savefig('joint_corner.pdf', bbox_inches='tight')
+if plot_cis:
+    fig.savefig('joint_corner_cis.png',dpi=500, bbox_inches='tight')
+    fig.savefig('joint_corner_cis.pdf', bbox_inches='tight')
+else:
+    fig.savefig('joint_corner.png',dpi=500, bbox_inches='tight')
+    fig.savefig('joint_corner.pdf', bbox_inches='tight')
