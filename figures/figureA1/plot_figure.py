@@ -18,10 +18,10 @@ default_kwargs = dict(
     levels=(1 - np.exp(-0.5), 1 - np.exp(-2), 1 - np.exp(-9 / 2.)),
     plot_density=False,
     plot_datapoints=False,
-    title_fmt = ".4f",
+    # title_fmt = ".4f",
     fill_contours=False,
     max_n_ticks = 4,
-    show_titles=True,
+    show_titles=False,
     label_kwargs=dict(fontsize=26),
     labelpad=0.2,
 )
@@ -33,27 +33,27 @@ for nop in nope:
     del sel_samples[nop]
 sel_samples["m_min"] = (np.array(sel_samples["m_min"]) / 1e5).tolist()
 sel_samples["m_max"] = (np.array(sel_samples["m_max"]) / 1e7).tolist()
-sel_samples["rate"] = np.log10(sel_samples["rate"])
+sel_samples["rate"] = np.log10(sel_samples["rate"]) - 1
 
 with open('../../data/population_posteriors/T10/0/NO_SF/result.json','r') as f:
     nosel_samples = json.load(f)["posterior_samples"]
 for nop in nope:
     del nosel_samples[nop]
 nosel_samples["rate"] = np.random.poisson(lam=106, size=len(nosel_samples["lambda_M"])) #222 #237
-nosel_samples["rate"] = np.log10(nosel_samples["rate"])
+nosel_samples["rate"] = np.log10(nosel_samples["rate"]) - 1
 nosel_samples["m_min"] = (np.array(nosel_samples["m_min"]) / 1e5).tolist()
 nosel_samples["m_max"] = (np.array(nosel_samples["m_max"]) / 1e7).tolist()
 
 with open('../../data/population_posteriors/T10/0/truths.json') as f:
     truths = json.load(f)
-truths["rate"] = np.log10(truths["rate"])
+truths["rate"] = np.log10(truths["rate"]) - 1
 truths["m_min"] /= 1e5
 truths["m_max"] /= 1e7
 
 labels = [
     r"$\lambda_M$",r"$M_\mathrm{min}\,[10^5 M_\odot]$",r"$M_\mathrm{max}\,[10^7 M_\odot]$",
     r"$\lambda_\mu$",r"$\mu_\mathrm{min}\,[M_\odot]$",r"$\mu_\mathrm{max}\,[M_\odot]$",
-    r"$\mu_a$",r"$\sigma_a$",r"$\log_{10}(\mathcal{R})$",
+    r"$\mu_a$",r"$\sigma_a$",r"$\log_{10}(\mathcal{R}) [~\mathrm{yr}^{-1}]$",
 ]
 
 fig = corner.corner(
@@ -69,5 +69,5 @@ orange = mlines.Line2D([],[], color=pal[4],linestyle="dashed", linewidth=3.5,lab
 
 fig.legend(handles=[orange, blue], loc=(0.6, 0.8),fontsize=32, frameon=False)
 
-fig.savefig('joint_corner_temp.png',dpi=500, bbox_inches='tight')
-fig.savefig('joint_corner_temp.pdf', bbox_inches='tight')
+fig.savefig('joint_corner.png',dpi=500, bbox_inches='tight')
+fig.savefig('joint_corner.pdf', bbox_inches='tight')

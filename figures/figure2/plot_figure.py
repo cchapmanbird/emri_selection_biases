@@ -30,23 +30,23 @@ with open('../../data/population_posteriors/T10/0/SF/result.json','r') as f:
     sel_samples = json.load(f)["posterior_samples"]
 for nop in nope:
     del sel_samples[nop]
-sel_samples["rate"] = np.log10(sel_samples["rate"])
+sel_samples["rate"] = np.log10(sel_samples["rate"]) - 1
 with open('../../data/population_posteriors/T10/0/NO_SF/result.json','r') as f:
     nosel_samples = json.load(f)["posterior_samples"]
 for nop in nope:
     del nosel_samples[nop]
 nosel_samples["rate"] = np.random.poisson(lam=113, size=len(nosel_samples["lambda_M"])) #222 #237
-nosel_samples["rate"] = np.log10(nosel_samples["rate"])
+nosel_samples["rate"] = np.log10(nosel_samples["rate"]) - 1
 with open('../../data/population_posteriors/T10/0/truths.json') as f:
     truths = json.load(f)
-truths["rate"] = np.log10(truths["rate"])
+truths["rate"] = np.log10(truths["rate"]) - 1
 subset_inds = np.array([0,3,6,7,8])
 truths_sub = dict()
 for m,key in enumerate(truths.keys()):
     if m in subset_inds:
         truths_sub[key] = truths[key]
 labels = [
-    r"$\lambda_M$",r"$\lambda_\mu$", r"$\mu_a$",r"$\sigma_a$",r"$\log_{10}(\mathcal{R})$",
+    r"$\lambda_M$",r"$\lambda_\mu$", r"$\mu_a$",r"$\sigma_a$",r"$\log_{10}(\mathcal{R}) [~\mathrm{yr}^{-1}]$",
 ]
 
 fig = corner.corner(
