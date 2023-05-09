@@ -145,3 +145,14 @@ fig.tight_layout()
 
 plt.savefig('CDFs.pdf')
 plt.savefig('CDFs.png',dpi=500)
+
+# reading off some interesting points
+print(1-np.interp([10], near_abs_cdf[0], near_abs_cdf[1]))
+print(1-np.interp([10], lin_abs_cdf[0], lin_abs_cdf[1]))
+print(1-np.interp([10], spl_abs_cdf[0], spl_abs_cdf[1]))
+print(1-np.interp([0.1], near_rel_cdf[0], near_rel_cdf[1]))
+print(1-np.interp([0.1], lin_rel_cdf[0], lin_rel_cdf[1]))
+print(1-np.interp([0.1], spl_rel_cdf[0], spl_rel_cdf[1]))
+print(np.interp([1], net_abs_cdf[0], net_abs_cdf[1]))
+print(np.interp([0.1], net_rel_cdf[0], net_rel_cdf[1]))
+
